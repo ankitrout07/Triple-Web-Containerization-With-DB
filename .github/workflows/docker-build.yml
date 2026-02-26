@@ -1,0 +1,29 @@
+name: Docker Build
+
+on:
+    push:
+        branches: ["main", "master"]
+    pull_request:
+        branches: ["main", "master"]
+
+jobs:
+    build-web:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                service: [web1, web2, web3]
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build Docker image
+              run: |
+                  docker build ./${{ matrix.service }} --file ./${{ matrix.service }}/Dockerfile --tag ${{ matrix.service }}:latest
+
+    build-nginx:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build Nginx (Config Check)
+              run: |
+                  # Since Nginx uses a volume for config in docker-compose, 
+                  # we can still run a config check using a temporary container.
+                  docker run --rm -v ${{ github.workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro nginx:latest nginx -t
