@@ -1,12 +1,27 @@
-from flask import Flask, render_template, request, redirect
-import mariadb
+import os
 import socket
+import mariadb
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
+
+# Identity settings
 node_id = socket.gethostname()
+site_name = os.getenv("SITE_NAME", "ALPHA")
+
+# Database settings
+DB_HOST = os.getenv("DB_HOST", "db")
+DB_USER = os.getenv("DB_USER", "user")
+DB_PASS = os.getenv("DB_PASSWORD", "password")
+DB_NAME = os.getenv("DB_NAME", "app_db")
 
 def get_db():
-    return mariadb.connect(host="db", user="user", password="password", database="app_db")
+    return mariadb.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASS,
+        database=DB_NAME
+    )
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -24,7 +39,7 @@ def index():
         except Exception as e:
             return f"Database Error: {str(e)}"
     
-    return render_template('index.html', site="BETA", node=node_id)
+    return render_template('index.html', site=site_name, node=node_id)
 
 @app.route('/admin')
 def admin():
@@ -34,7 +49,7 @@ def admin():
         cur.execute("SELECT id, username, created_at FROM site_logins ORDER BY created_at DESC")
         entries = cur.fetchall()
         conn.close()
-        return render_template('admin.html', site="BETA", node=node_id, entries=entries)
+        return render_template('admin.html', site=site_name, node=node_id, entries=entries)
     except Exception as e:
         return f"Database Error: {str(e)}"
 

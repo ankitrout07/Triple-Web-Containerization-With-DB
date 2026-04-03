@@ -1,5 +1,56 @@
+# ==============================================================================
+# Triple-Web-DB: Professional Gitignore Manifest
+# ==============================================================================
+
+# --- Project Specific ---
 db_data/
-*.log
-__pycache__/
-*.pyc
 .env
+*.log
+post_data.txt
+
+# --- Python & Flask ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+ENV/
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- DevOps & Infrastructure ---
+.docker/
+*.tar
+*.gz
+
+# --- IDEs & Code Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Miscellaneous ---
+tmp/
+scratch/

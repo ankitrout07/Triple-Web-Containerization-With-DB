@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple-Web Admin | {{ site }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #030712;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-bg: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        h1 { font-size: 2.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Dashboard Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .stat-value { font-size: 1.5rem; font-weight: 600; color: #fff; margin-top: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+
+        /* Audit Table */
+        .table-container {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #1e293b;
+            padding: 1.25rem 1.5rem;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+        .id-cell { font-family: 'JetBrains Mono', monospace; color: var(--primary); font-weight: 600; }
+        .timestamp-cell { color: #64748b; font-size: 0.85rem; }
+
+        .no-data {
+            padding: 4rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .btn-back {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover { color: var(--primary); transform: translateX(-4px); }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.8rem; }
+            .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Infrastructure Log</h1>
+                <p style="color: #64748b; margin-top: 0.5rem;">Monitoring Real-time SQL Ingestion</p>
+            </div>
+            <div class="status-badge">Node: {{ site }} Online</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Active Host</div>
+                <div class="stat-value" style="color: #38bdf8;">{{ node }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Database Origin</div>
+                <div class="stat-value" style="color: var(--primary);">MariaDB 10.6</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Refresh Interval</div>
+                <div class="stat-value" style="color: #f59e0b;">5 SECONDS</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Resource Identity / Ingestion</th>
+                        <th>Processing Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td class="id-cell">#{{ entry[0] }}</td>
+                        <td style="font-weight: 600; color: #f1f5f9;">{{ entry[1] }}</td>
+                        <td class="timestamp-cell">{{ entry[2] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="no-data">
+                            <p>No audit records discovered in persistence layer.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn-back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Return to Gateway
+            </a>
+        </div>
+    </div>
+</body>
+</html>
